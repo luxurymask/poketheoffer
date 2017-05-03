@@ -1,7 +1,7 @@
 package poketheoffer;
 
 /**
- * It turns out that the 1/2 jumpFloor is Fibonacci.
+ * It turns out to be that the 1/2 jumpFloor is Fibonacci.
  * @author liuxl
  *
  */
