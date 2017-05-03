@@ -6,7 +6,7 @@ public class Fibonacci {
 	 * @param n
 	 * @return
 	 */
-	public int fibonacci2(int n){
+	public int fibonacciDP(int n){
 		if(n == 0) return 0;
 		if(n == 1) return 1;
 		if(n == 2) return 1;
