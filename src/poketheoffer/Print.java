@@ -7,6 +7,7 @@ import java.util.Queue;
 public class Print {
 	ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
 		ArrayList<ArrayList<Integer>> resultList = new ArrayList<ArrayList<Integer>>();
+		if(pRoot == null) return resultList;
     	Queue<TreeNode> queue = new LinkedList<TreeNode>();
 		queue.add(pRoot);
 		TreeNode current;
