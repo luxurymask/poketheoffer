@@ -8,7 +8,6 @@ import java.util.Set;
 public class FirstNotRepeatingChar {
 	public static int FirstNotRepeatingChar(String str) {
 		Map<Character, Integer> map = new HashMap<Character, Integer>();
-		Set<Character> result = new HashSet<Character>();
 		char[] bytes = str.toCharArray();
 		for(char c : bytes){
 			if(map.containsKey(c)){
@@ -18,14 +17,8 @@ public class FirstNotRepeatingChar {
 			}
 		}
 		
-		for(Map.Entry<Character, Integer> entry : map.entrySet()){
-			if(entry.getValue() == 1){
-				result.add(entry.getKey());
-			}
-		}
-		
 		for(int i = 0;i < bytes.length;i++){
-			if(result.contains(bytes[i])){
+			if(map.containsKey(bytes[i]) && map.get(bytes[i]) == 1){
 				return i;
 			}
 		}
