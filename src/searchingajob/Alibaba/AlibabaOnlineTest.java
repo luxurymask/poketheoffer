@@ -1,4 +1,4 @@
-package searchingajob;
+package searchingajob.Alibaba;
 
 import java.util.HashMap;
 import java.util.HashSet;
