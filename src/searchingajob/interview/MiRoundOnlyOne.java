@@ -49,23 +49,23 @@ public class MiRoundOnlyOne {
 	 * @param target
 	 * @return
 	 */
-	public static boolean isSame(String pattern, String target){
-		if(pattern == null || target == null) return false;
-		int i = 0, j = 0;
-		char lastChar = '\u0000';
-		while(i < pattern.length() && j < target.length()){
-			char patternChar = pattern.charAt(i);
-			char targetChar = target.charAt(j);
-			if(patternChar == targetChar){
-				lastChar = patternChar;
-				i++;
-				j++;
-				continue;
-			}
-			if(patternChar != '*' || lastChar == '\u0000') return false;
-			while(lastChar == targetChar && j < target.length()){
-				j++;
-			}
-		}
-	}
+//	public static boolean isSame(String pattern, String target){
+//		if(pattern == null || target == null) return false;
+//		int i = 0, j = 0;
+//		char lastChar = '\u0000';
+//		while(i < pattern.length() && j < target.length()){
+//			char patternChar = pattern.charAt(i);
+//			char targetChar = target.charAt(j);
+//			if(patternChar == targetChar){
+//				lastChar = patternChar;
+//				i++;
+//				j++;
+//				continue;
+//			}
+//			if(patternChar != '*' || lastChar == '\u0000') return false;
+//			while(lastChar == targetChar && j < target.length()){
+//				j++;
+//			}
+//		}
+//	}
 }
