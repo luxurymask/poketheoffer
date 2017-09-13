@@ -1,10 +1,10 @@
-package searchingajob.interview;
+package searchingajob.Mi;
 
 /**
  * 9月5号小米六期一轮游。
  * @author liuxl
  */
-public class MiRoundOnlyOne {
+public class MiInterviewRoundOnlyOne {
 	/**
 	 * 版本大小比较，版本格式10.1.3.0，10.1.3.0 > 10.1.3。
 	 * @param version1
