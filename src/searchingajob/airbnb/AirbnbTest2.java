@@ -1,95 +1,118 @@
 package searchingajob.airbnb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 public class AirbnbTest2 {
-    public static int start = 0;  
-    
-    static int[] meet(String[] wizards) {
-		int[][] w = new int[10][10];
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				w[i][j] = Integer.MAX_VALUE;
+	public static int INFINITE = Integer.MAX_VALUE;
+
+	public static Map<Integer, List<Integer>> shortestPath(int[][] graph, int from, int to) {
+		int[] distance = Arrays.copyOf(graph[from],graph[from].length);
+		List<List<Integer>> list = new ArrayList<>();
+		PriorityQueue<Integer> heap = new PriorityQueue<>(new Comparator<Integer>() {
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return distance[i1] - distance[i2];
 			}
+		});
+
+		for (int i = 0; i < distance.length; i++) {
+			heap.add(i);
+			list.add(new ArrayList<>());
 		}
 
-		for (int i = 0; i < 10; i++) {
-			w[i][i] = 0;
-			for (int j = 0; j < wizards[i].length(); j += 2) {
-				int k = (int) (wizards[i].charAt(j) - '0');
-				w[i][k] = (k - i) * (k - i);
+		while (!heap.isEmpty()) {
+			int current = heap.poll();
+			heap.add(current);
+			current = heap.poll();
+			list.get(current).add(current);
+			if (current == to)
+				break;
 
-			}
-		}
-
-		int[] D = new int[10];
-		int[][] p = new int[10][10];
-		int[] final1 = new int[10];
-		int n = 10;
-		int v0 = 0;
-		int v, w1;
-
-		for (v = 0; v < n; v++)
-		{
-			final1[v] = 0;
-			D[v] = w[v0][v];
-			for (w1 = 0; w1 < n; w1++)
-				p[v][w1] = 0;
-			if (D[v] < Integer.MAX_VALUE) {
-				p[v][v0] = 1;
-				p[v][v] = 1;
-			}
-		}
-		D[v0] = 0;
-		final1[v0] = 0; 
-		for (int i = 0; i < n; i++) {
-			int min = Integer.MAX_VALUE;
-			for (w1 = 0; w1 < n; w1++) {
-				if (final1[w1] == 0)
-				{
-					if (D[w1] < min) {
-						v = w1;
-						min = D[w1];
-					}
+			List<Integer> neighbourList = new ArrayList<>();
+			int[] neighbourArray = graph[current];
+			for (int i = 0; i < neighbourArray.length; i++) {
+				if (neighbourArray[i] != INFINITE && i != current) {
+					neighbourList.add(i);
 				}
 			}
-			final1[v] = 1;
-			for (w1 = 0; w1 < n; w1++)
-			{
-				if (final1[w1] == 0 && (min + w[v][w1] < D[w1])) {
-					D[w1] = min + w[v][w1];
-					p[v][w1] = 1; 
+
+			int newDistance;
+			for (int neighbourIndex : neighbourList) {
+				if (heap.contains(neighbourIndex) && (newDistance = distance[current] + graph[current][neighbourIndex]) < distance[neighbourIndex]) {
+					distance[neighbourIndex] = newDistance;
+					List<Integer> neighbour = list.get(neighbourIndex);
+					neighbour.clear();
+					neighbour.addAll(list.get(current));
 				}
 			}
 		}
-		List<Integer> list = new ArrayList<Integer>();
-		list.add(0);
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				if (p[i][j] == 1 && i != j) {
-					list.add(j);
-					if (j == 9) {
-						break;
-					}
-				}
-
-			}
-
-		}
-
-		int[] ret = new int[list.size()];
-		for (int i = 0; i < list.size(); i++) {
-			ret[i] = list.get(i);
-		}
-		return ret;
+		Map<Integer, List<Integer>> resultMap = new HashMap<>();
+		List<Integer> path = list.get(to);
+		resultMap.put(distance[to], path);
+		return resultMap;
 	}
-    
-    public static void main(String[] args){
-    	String[] wizarzs = new String[]{"1 2 3", "8 6 4","7 8 3","8 1","6","8 7","9 4","4 6","1","1 4"};
-    	int[] array = meet(wizarzs);
-    	for(int i : array){
-        	System.out.println(array[i]);
-    	}
-    }
+
+	static int[] meet(String[] wizards) {
+		int n = wizards.length;
+		int[][] graph = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			String s = wizards[i];
+			String[] array = s.split(" ");
+			Set<Integer> set = new HashSet<>();
+			for(int k = 0;k < array.length;k++){
+				set.add(Integer.parseInt(array[k]));
+			}
+			for (int j = 0, k = 0; j < n; j++) {
+				if (set.contains(j)) {
+					graph[i][j] = (j - i) * (j - i);
+				} else {
+					graph[i][j] = INFINITE;
+				}
+			}
+		}
+		for (int i = 0; i < n; i++) {
+			if (graph[0][i] != INFINITE)
+				graph[0][i] = 0;
+		}
+		
+		int min = INFINITE;
+		List<Integer> resultList = new ArrayList<>();
+		int minIndex = 0;
+		for(int i = 0;i < n;i++){
+			if(graph[0][i] != INFINITE){
+				Map<Integer, List<Integer>> map = shortestPath(graph, i, 9);
+				Map.Entry<Integer, List<Integer>> entry = map.entrySet().iterator().next();
+				if(min > entry.getKey()){
+					minIndex = i;
+					min = entry.getKey();
+					resultList = entry.getValue();
+				}
+			}
+		}
+		
+		int[] result = new int[resultList.size() + 2];
+		for(int i = 2;i <= resultList.size() + 1;i++){
+			result[i] = resultList.get(i - 2);
+		}
+		result[0] = 0;
+		result[1] = minIndex;
+		
+		return result;
+	}
+
+	public static void main(String[] args) {
+		String[] wizarzs = new String[] { "1 2 3", "8 6 4", "7 8 3", "8 1", "6", "8 7", "9 4", "4 6", "1", "1 4" };
+		int[] array = meet(wizarzs);
+		for (int i = 0;i < array.length;i++) {
+			System.out.println(array[i]);
+		}
+	}
 }
