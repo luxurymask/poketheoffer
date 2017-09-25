@@ -3,6 +3,9 @@ package searchingajob.miaozhen;
 import java.util.Deque;
 import java.util.LinkedList;
 
+/**
+ * 中序表达式转后序表达式
+ */
 public class MiaozhenInterview {
 	public static String convert(String infix) {
 		StringBuffer sb = new StringBuffer();
